@@ -48,7 +48,7 @@ public class Field implements CheckersField {
 		
 		g.fillOval(xcord - radius, ycord - radius, 2 * radius, 2 * radius);
 		if(piece != null) {
-			g.setColor(Color.RED);
+			g.setColor(piece.getColor());
 			g.fillOval(xcord - (radius - 10), ycord - (radius - 10), 2 * (radius - 10), 2 * (radius - 10));
 		}
 	}
@@ -66,9 +66,9 @@ public class Field implements CheckersField {
 		tostring += String.valueOf(selectorBlock) + " ";
 		tostring += String.valueOf(canMove) + " ";
 		if(piece != null) {
-			tostring += "1";
+			tostring += String.valueOf(piece.getOwnerId());
 		} else {
-			tostring += "0";
+			tostring += "6";
 		}
 						
 		return tostring;
@@ -84,8 +84,8 @@ public class Field implements CheckersField {
 		field.setSelected(Boolean.valueOf(splited[6]));
 		field.setBlock(Boolean.valueOf(splited[7]));
 		field.setCanMove(Boolean.valueOf(splited[8]));
-		if(Integer.valueOf(splited[9]) == 1) {
-			field.addPiece(new Piece());
+		if(Integer.valueOf(splited[9]) != 6) {
+			field.addPiece(new Piece(Integer.parseInt(splited[9])));
 		}
 		
 		return field;

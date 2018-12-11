@@ -10,11 +10,11 @@ public class SimpleBoard implements Board {
 	private int size = 700;
 	private ArrayList<BoardCorner> corners;
 	
-	public SimpleBoard() {
+	public SimpleBoard(int playerSize) {
 		createFields();
-		for(int i = 0; i < 2; i++) {
+		for(int i = 0; i < playerSize; i++) {
 			for(Field field : corners.get(i).getCorner()) {
-				field.addPiece(new Piece());
+				field.addPiece(new Piece(i));
 			}
 		}
 	}
@@ -81,15 +81,19 @@ public class SimpleBoard implements Board {
 		return size;
 	}
 
-	public void selectField(int xclick, int yclick) {
+	public void selectField(int xclick, int yclick, int id) {
 		for(Field field : fields) {
 			int n = Math.abs(field.getXCord() - xclick);
 			int m = Math.abs(field.getYCord() - yclick);
 			int k = (int) (Math.sqrt(((double) (n * n)) + ((double) (m * m))));
 			if(k <= field.getRadius()) {
 				if(!checkSelect()) {
-					handleSelect(field);
-					handleCanMove(field, true);
+					handleSelect(field, id);
+					if(field.getPiece() != null) {
+						if(field.getPiece().getOwnerId() == id) {
+							handleCanMove(field, true);
+						}
+					}
 				} else if(checkSelect()) {
 			    	handleMove(field);
 				}
@@ -97,10 +101,12 @@ public class SimpleBoard implements Board {
 		}
 	}
 	
-	protected void handleSelect(Field field) {
+	protected void handleSelect(Field field, int id) {
 		if(!field.isSelected() && field.getPiece() != null) {
-			field.setSelected(true);
-			blockAllFields(true);
+			if(field.getPiece().getOwnerId() == id) {
+				field.setSelected(true);
+				blockAllFields(true);
+			}
 		} else {
 			field.setSelected(false);
 			blockAllFields(false);
@@ -216,6 +222,56 @@ public class SimpleBoard implements Board {
 							}
 							i++;
 						}
+					} else if(withPiece.getLinePosition() < field.getLinePosition() && !getIllegalNWFields().contains(withPiece)) {
+						getFieldByLinePosition(withPiece.getLinePosition() - 1, withPiece.getColumn() - 1).setCanMove(true);
+						int i = 0;
+						while(getFieldByLinePosition(withPiece.getLinePosition() - 2 * i, withPiece.getColumn() - 2 * i).getPiece() != null) {
+							if(getIllegalNWFields().contains(getFieldByLinePosition(withPiece.getLinePosition() - 2 * i, withPiece.getColumn() - 2 * i))) {
+								break;
+							}
+							if(getFieldByLinePosition(withPiece.getLinePosition() - 2 * i - 1, withPiece.getColumn() - 2 * i - 1).getPiece() != null) {
+								break;
+							}
+							getFieldByLinePosition(withPiece.getLinePosition() - 2 * i - 1, withPiece.getColumn() - 2 * i - 1).setCanMove(true);
+							if(getIllegalNWFields().contains(getFieldByLinePosition(withPiece.getLinePosition() - 2 * i - 1, withPiece.getColumn() - 2 * i - 1))) {
+								break;
+							}
+							i++;
+						}
+					}
+				} else if(withPiece.getColumn() > field.getColumn() && withPiece.getColumn() != 16) {
+					if(withPiece.getLinePosition() > field.getLinePosition() && !getIllegalSEFields().contains(withPiece)) {
+						getFieldByLinePosition(withPiece.getLinePosition() + 1, withPiece.getColumn() + 1).setCanMove(true);
+						int i = 0;
+						while(getFieldByLinePosition(withPiece.getLinePosition() + 2 * i, withPiece.getColumn() + 2 * i).getPiece() != null) {
+							if(getIllegalSEFields().contains(getFieldByLinePosition(withPiece.getLinePosition() + 2 * i, withPiece.getColumn() + 2 * i))) {
+								break;
+							}
+							if(getFieldByLinePosition(withPiece.getLinePosition() + 2 * i + 1, withPiece.getColumn() + 2 * i + 1).getPiece() != null) {
+								break;
+							}
+							getFieldByLinePosition(withPiece.getLinePosition() + 2 * i + 1, withPiece.getColumn() + 2 * i + 1).setCanMove(true);
+							if(getIllegalSEFields().contains(getFieldByLinePosition(withPiece.getLinePosition() + 2 * i + 1, withPiece.getColumn() + 2 * i + 1))) {
+								break;
+							}
+							i++;
+						}
+					} else if(withPiece.getLinePosition() < field.getLinePosition() && !getIllegalSWFields().contains(withPiece)) {
+						getFieldByLinePosition(withPiece.getLinePosition() - 1, withPiece.getColumn() + 1).setCanMove(true);
+						int i = 0;
+						while(getFieldByLinePosition(withPiece.getLinePosition() - 2 * i, withPiece.getColumn() + 2 * i).getPiece() != null) {
+							if(getIllegalSWFields().contains(getFieldByLinePosition(withPiece.getLinePosition() - 2 * i, withPiece.getColumn() + 2 * i))) {
+								break;
+							}
+							if(getFieldByLinePosition(withPiece.getLinePosition() - 2 * i - 1, withPiece.getColumn() + 2 * i + 1).getPiece() != null) {
+								break;
+							}
+							getFieldByLinePosition(withPiece.getLinePosition() - 2 * i - 1, withPiece.getColumn() + 2 * i + 1).setCanMove(true);
+							if(getIllegalSWFields().contains(getFieldByLinePosition(withPiece.getLinePosition() - 2 * i - 1, withPiece.getColumn() + 2 * i + 1))) {
+								break;
+							}
+							i++;
+						}
 					}
 				}
 			}
@@ -266,6 +322,69 @@ public class SimpleBoard implements Board {
 		fieldsList.add(getFieldByPosition(10, 10));
 		fieldsList.add(getFieldByPosition(11, 11));
 		fieldsList.add(getFieldByPosition(12, 12));
+		return fieldsList;
+	}
+	
+	protected ArrayList<Field> getIllegalNWFields() {
+		ArrayList<Field> fieldsList = new ArrayList<Field>();
+		fieldsList.add(getFieldByPosition(0, 4));
+		fieldsList.add(getFieldByPosition(1, 4));
+		fieldsList.add(getFieldByPosition(2, 4));
+		fieldsList.add(getFieldByPosition(3, 4));
+		fieldsList.add(getFieldByPosition(4, 4));
+		fieldsList.add(getFieldByPosition(9, 4));
+		fieldsList.add(getFieldByPosition(10, 4));
+		fieldsList.add(getFieldByPosition(11, 4));
+		fieldsList.add(getFieldByPosition(12, 4));
+		fieldsList.add(getFieldByPosition(0, 1));
+		fieldsList.add(getFieldByPosition(0, 2));
+		fieldsList.add(getFieldByPosition(0, 3));
+		fieldsList.add(getFieldByPosition(0, 9));
+		fieldsList.add(getFieldByPosition(0, 10));
+		fieldsList.add(getFieldByPosition(0, 11));
+		fieldsList.add(getFieldByPosition(0, 12));
+		return fieldsList;
+	}
+	
+	protected ArrayList<Field> getIllegalSEFields() {
+		ArrayList<Field> fieldsList = new ArrayList<Field>();
+		fieldsList.add(getFieldByPosition(0, 12));
+		fieldsList.add(getFieldByPosition(1, 12));
+		fieldsList.add(getFieldByPosition(2, 12));
+		fieldsList.add(getFieldByPosition(3, 12));
+		fieldsList.add(getFieldByPosition(8, 12));
+		fieldsList.add(getFieldByPosition(9, 12));
+		fieldsList.add(getFieldByPosition(1, 15));
+		fieldsList.add(getFieldByPosition(2, 14));
+		fieldsList.add(getFieldByPosition(3, 13));
+		fieldsList.add(getFieldByPosition(10, 12));
+		fieldsList.add(getFieldByPosition(11, 12));
+		fieldsList.add(getFieldByPosition(12, 12));
+		fieldsList.add(getFieldByPosition(9, 7));
+		fieldsList.add(getFieldByPosition(10, 6));
+		fieldsList.add(getFieldByPosition(11, 5));
+		fieldsList.add(getFieldByPosition(12, 4));
+		return fieldsList;
+	}
+	
+	protected ArrayList<Field> getIllegalSWFields() {
+		ArrayList<Field> fieldsList = new ArrayList<Field>();
+		fieldsList.add(getFieldByPosition(0, 12));
+		fieldsList.add(getFieldByPosition(1, 12));
+		fieldsList.add(getFieldByPosition(2, 12));
+		fieldsList.add(getFieldByPosition(3, 12));
+		fieldsList.add(getFieldByPosition(4, 12));
+		fieldsList.add(getFieldByPosition(9, 12));
+		fieldsList.add(getFieldByPosition(10, 12));
+		fieldsList.add(getFieldByPosition(11, 12));
+		fieldsList.add(getFieldByPosition(12, 12));
+		fieldsList.add(getFieldByPosition(0, 13));
+		fieldsList.add(getFieldByPosition(0, 14));
+		fieldsList.add(getFieldByPosition(0, 15));
+		fieldsList.add(getFieldByPosition(0, 4));
+		fieldsList.add(getFieldByPosition(0, 5));
+		fieldsList.add(getFieldByPosition(0, 6));
+		fieldsList.add(getFieldByPosition(0, 7));
 		return fieldsList;
 	}
 }

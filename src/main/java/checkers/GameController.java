@@ -12,9 +12,20 @@ public class GameController {
 
 	private SimpleBoard board;
 	
-	public GameController() {
-		board = new SimpleBoard();
-		runServer();
+	private Socket socket;
+	private BufferedReader in;
+	private PrintWriter out;
+	private ServerSocket listener;
+	private int playerNumber;
+	
+	public GameController(int playerSize) {
+		playerNumber = playerSize;
+		board = new SimpleBoard(playerSize);
+		try {
+			runServer();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public int getBoardSize() {
@@ -34,40 +45,31 @@ public class GameController {
 		return fieldsstring;
 	}
 	
-	public void boardAction(int x, int y) {
-		board.selectField(x, y);
+	public void boardAction(int x, int y, int id) {
+		board.selectField(x, y, id);
 	}
 	
-	public void runServer() {
-		try {
-            ServerSocket listener = new ServerSocket(9090);
-            try {
-                while(true) {
-                    Socket socket = listener.accept();
-                    try {
-                        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                        String input = in.readLine();
-                        String[] inputAsStringArray = input.split("\\s+");
-                        int[] toSend = new int[inputAsStringArray.length];
-                        for(int i = 0; i < inputAsStringArray.length; i++) {
-                        	toSend[i] = Integer.parseInt(inputAsStringArray[i]);
-                        }
-                        boardAction(toSend[0], toSend[1]);
-                        
-                        String output = getFieldsAsString();
-                        out.println(output);
-                        
-                    } finally {
-                        socket.close();
-                    }
-                }    
-            } finally {
-                listener.close();
-            }
-        } catch(IOException e) {
-        	e.printStackTrace();
-        }
+	public void runServer() throws IOException {
+		ServerSocket listener = new ServerSocket(9090);
+		/*Socket socket = listener.accept();        
+		out = new PrintWriter(socket.getOutputStream(), true);
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        */
+		while(true) {
+			/*String input = in.readLine();
+			String[] inputAsStringArray = input.split("\\s+");
+			int[] toSend = new int[inputAsStringArray.length];
+			for(int i = 0; i < inputAsStringArray.length; i++) {
+				toSend[i] = Integer.parseInt(inputAsStringArray[i]);
+			}
+			boardAction(toSend[0], toSend[1], toSend[2]);
+			String output = getFieldsAsString();
+			out.println(output);*/
+			socket = listener.accept();
+			out = new PrintWriter(socket.getOutputStream(), true);
+	        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			new ClientThread(socket, in, out, this).start();
+		}
 	}
 	
 }

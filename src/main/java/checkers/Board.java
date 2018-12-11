@@ -8,7 +8,7 @@ public interface Board {
 	
 	ArrayList<Field> getFields();
 	
-	void selectField(int x, int y);
+	void selectField(int x, int y, int id);
 	
 	void onStart();
 	
