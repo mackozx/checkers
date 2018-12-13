@@ -20,9 +20,9 @@ public class CheckersPanel extends JPanel implements MouseListener {
 		addMouseListener(this);
 		client = c;
 		try {
-			fieldslist = client.connect(0, 0);
+			client.connect(0, 0);
 		} catch(Exception e) {
-			e.printStackTrace();
+			
 		}
 	}
 	
@@ -32,8 +32,12 @@ public class CheckersPanel extends JPanel implements MouseListener {
 	}
 
 	protected void drawBoard(Graphics g) {
-		for(Field field : fieldslist) {
-			field.draw(g);
+		try {
+			for(Field field : fieldslist) {
+				field.draw(g);
+			}
+		} catch(Exception e) {
+
 		}
 	}
 
@@ -53,7 +57,7 @@ public class CheckersPanel extends JPanel implements MouseListener {
 		int x = arg0.getX();
 		int y = arg0.getY();
 		try {
-			fieldslist = client.connect(x, y);
+			client.connect(x, y);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -62,5 +66,10 @@ public class CheckersPanel extends JPanel implements MouseListener {
 
 	public void mouseReleased(MouseEvent arg0) {
 		
+	}
+	
+	public void setFields(ArrayList<Field> fields) {
+		fieldslist = fields;
+		repaint();
 	}
 }

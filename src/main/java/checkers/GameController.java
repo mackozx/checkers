@@ -17,10 +17,12 @@ public class GameController {
 	private PrintWriter out;
 	private ServerSocket listener;
 	private int playerNumber;
+	private ArrayList<ClientThread> clientsList;
 	
 	public GameController(int playerSize) {
 		playerNumber = playerSize;
 		board = new SimpleBoard(playerSize);
+		clientsList = new ArrayList<ClientThread>();
 		try {
 			runServer();
 		} catch(IOException e) {
@@ -46,29 +48,26 @@ public class GameController {
 	}
 	
 	public void boardAction(int x, int y, int id) {
-		board.selectField(x, y, id);
+		if(id == board.getActivePlayerId()) {
+			board.selectField(x, y, id);
+		}
 	}
 	
 	public void runServer() throws IOException {
 		ServerSocket listener = new ServerSocket(9090);
-		/*Socket socket = listener.accept();        
-		out = new PrintWriter(socket.getOutputStream(), true);
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        */
 		while(true) {
-			/*String input = in.readLine();
-			String[] inputAsStringArray = input.split("\\s+");
-			int[] toSend = new int[inputAsStringArray.length];
-			for(int i = 0; i < inputAsStringArray.length; i++) {
-				toSend[i] = Integer.parseInt(inputAsStringArray[i]);
-			}
-			boardAction(toSend[0], toSend[1], toSend[2]);
-			String output = getFieldsAsString();
-			out.println(output);*/
 			socket = listener.accept();
 			out = new PrintWriter(socket.getOutputStream(), true);
 	        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			new ClientThread(socket, in, out, this).start();
+	        ClientThread ct = new ClientThread(socket, in, out, this);
+	        clientsList.add(ct);
+	        ct.start();
+		}
+	}
+	
+	public void sendToAll(String s) {
+		for(ClientThread ct : clientsList) {
+			ct.sendOutput(s);
 		}
 	}
 	

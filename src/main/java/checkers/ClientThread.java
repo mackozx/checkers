@@ -34,12 +34,17 @@ public class ClientThread extends Thread {
 					}
 					gc.boardAction(toSend[0], toSend[1], toSend[2]);
 					String output = gc.getFieldsAsString();
-					out.println(output);
+					//out.println(output);
+					gc.sendToAll(output);
 				}
 			} catch(IOException e) {
 				e.printStackTrace();
 				return;
 			}
 		}
+	}
+	
+	public void sendOutput(String s) {
+		out.println(s);
 	}
 }

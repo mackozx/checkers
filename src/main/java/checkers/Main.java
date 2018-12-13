@@ -3,6 +3,6 @@ package checkers;
 public class Main {
 
 	public static void main(String[] args) {
-		new GameController(6);
+		new GameController(2);
 	}
 }

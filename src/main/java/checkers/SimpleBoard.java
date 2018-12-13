@@ -9,8 +9,12 @@ public class SimpleBoard implements Board {
 	private ArrayList<Field> fields;
 	private int size = 700;
 	private ArrayList<BoardCorner> corners;
+	private int activePlayerId;
+	private int players;
 	
 	public SimpleBoard(int playerSize) {
+		activePlayerId = 0;
+		players = playerSize;
 		createFields();
 		for(int i = 0; i < playerSize; i++) {
 			for(Field field : corners.get(i).getCorner()) {
@@ -123,6 +127,7 @@ public class SimpleBoard implements Board {
 						selectedField.setSelected(false);
 						blockAllFields(false);
 						setCanMoveAll(false);
+						moved();
 					}
 				} else {
 					selectedField.setSelected(false);
@@ -131,6 +136,18 @@ public class SimpleBoard implements Board {
 				}
 			}
 		}
+	}
+	
+	protected void moved() {
+		if(activePlayerId < players - 1) {
+			activePlayerId++;
+		} else {
+			activePlayerId = 0;
+		}
+	}
+	
+	public int getActivePlayerId() {
+		return activePlayerId;
 	}
 	
 	protected void canMoveToNext(Field field, boolean b) {	

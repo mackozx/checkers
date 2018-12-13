@@ -19,7 +19,7 @@ public class CheckersClient {
 	private PrintWriter out;
 	private CheckersFrame frame;
 	private Socket socket;
-	
+	private Thread connectionThread;
 	public CheckersClient(int id) {
 		clientId = id;
 		String serverAddress = "127.0.0.1";
@@ -30,16 +30,33 @@ public class CheckersClient {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+		connectionThread = new Thread() {
+			public void run() {
+				while(true) {
+					try {
+						String answer = in.readLine();
+						ArrayList<checkers.Field> flist = new ArrayList<checkers.Field>();
+						for(String s : answer.split("\\+")) {
+							flist.add(Field.buildFromString(s));
+						}
+						frame.getPanel().setFields(flist);
+					} catch(IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		connectionThread.start();
 	}
 	
-	public ArrayList<checkers.Field> connect(int a, int b) throws IOException {
+	public /*ArrayList<checkers.Field>*/void connect(int a, int b) throws IOException {
 		out.println(a + " " + b + " " + clientId);
-		String answer = in.readLine();
-		ArrayList<checkers.Field> flist = new ArrayList<checkers.Field>();
-		for(String s : answer.split("\\+")) {
-			flist.add(Field.buildFromString(s));
-		}
-		return flist;
+		//String answer = in.readLine();
+		//ArrayList<checkers.Field> flist = new ArrayList<checkers.Field>();
+		//for(String s : answer.split("\\+")) {
+		//	flist.add(Field.buildFromString(s));
+		//}
+		//return flist;
 	}
 	
 	public void initgui() {
