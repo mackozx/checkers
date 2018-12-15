@@ -1,7 +1,7 @@
 package checkers;
 
 import java.util.ArrayList;
-
+import java.util.Random;
 import checkers.Field;
 
 public class SimpleBoard implements Board {
@@ -11,10 +11,12 @@ public class SimpleBoard implements Board {
 	private ArrayList<BoardCorner> corners;
 	private int activePlayerId;
 	private int players;
+	private ArrayList<Integer> bots;
 	
 	public SimpleBoard(int playerSize) {
 		activePlayerId = 0;
 		players = playerSize;
+		bots = new ArrayList<Integer>();
 		createFields();
 		for(int i = 0; i < playerSize; i++) {
 			for(Field field : corners.get(i).getCorner()) {
@@ -59,6 +61,10 @@ public class SimpleBoard implements Board {
 	
 	}
 	
+	public void addBot(int id) {
+		bots.add(id);
+	}
+	
 	public ArrayList<Field> getFields() {
 		return fields;
 	}
@@ -85,7 +91,11 @@ public class SimpleBoard implements Board {
 		return size;
 	}
 
-	public void selectField(int xclick, int yclick, int id) {
+	public void selectField(int xclick, int yclick, int id, boolean isBot) {
+		if(xclick > 556 && xclick < 626 && yclick > 324 && yclick < 370 && id == activePlayerId) {
+			moved();
+			resetCanMove();
+		}
 		for(Field field : fields) {
 			int n = Math.abs(field.getXCord() - xclick);
 			int m = Math.abs(field.getYCord() - yclick);
@@ -99,7 +109,7 @@ public class SimpleBoard implements Board {
 						}
 					}
 				} else if(checkSelect()) {
-			    	handleMove(field);
+			    	handleMove(field, isBot);
 				}
 			}
 		}
@@ -117,7 +127,7 @@ public class SimpleBoard implements Board {
 		}
 	}
 	
-	protected void handleMove(Field field) {
+	protected void handleMove(Field field, boolean isbot) {
 		for(Field selectedField : fields) {
 			if(selectedField.isSelected()) {
 				if(selectedField != field && field.getPiece() == null) {
@@ -127,7 +137,9 @@ public class SimpleBoard implements Board {
 						selectedField.setSelected(false);
 						blockAllFields(false);
 						setCanMoveAll(false);
-						moved();
+						if(!isbot) {
+							moved();
+						}
 					}
 				} else {
 					selectedField.setSelected(false);
@@ -138,11 +150,47 @@ public class SimpleBoard implements Board {
 		}
 	}
 	
-	protected void moved() {
+	protected void addPlayerId() {
 		if(activePlayerId < players - 1) {
 			activePlayerId++;
 		} else {
 			activePlayerId = 0;
+		}
+		System.out.println("PLAYERID NOW " + activePlayerId);
+		/*if(bots.contains(activePlayerId)) {
+			botTurn(activePlayerId);
+		}*/
+	}
+	
+	protected void moved() {
+		addPlayerId();
+		if(bots.contains(activePlayerId)) {
+			try {
+				botTurn(activePlayerId);
+			} catch(Exception e) {
+				
+			}
+			moved();
+		}
+	}
+	
+	protected void botTurn(int id) {
+		Random ran = new Random();
+		Field botField;
+		ArrayList<Field> withPiece = new ArrayList<Field>();
+		for(Field field : fields) {
+			if(field.getPiece() != null) {
+				if(field.getPiece().getOwnerId() == id) {
+					withPiece.add(field);
+				}
+			}
+		}
+		botField = withPiece.get(ran.nextInt(withPiece.size() - 1));
+		selectField(botField.getXCord(), botField.getYCord(), activePlayerId, true);
+		System.out.println("SELECTED PIECE " + botField.getLine() + " " + botField.getColumn());
+		if(getCanMoveList().size() != 0) {
+			Field toMove = getCanMoveList().get(ran.nextInt(getCanMoveList().size() - 1));
+			selectField(toMove.getXCord(), toMove.getYCord(), activePlayerId, true);
 		}
 	}
 	
@@ -178,6 +226,14 @@ public class SimpleBoard implements Board {
 			}
 		}
 		return canMoveFieldsList;
+	}
+	
+	protected void resetCanMove() {
+		for(Field fieldToMove : fields) {
+			if(fieldToMove.getCanMove()) {
+				fieldToMove.setCanMove(false);
+			}
+		}
 	}
 	
 	protected void handleCanMove(Field field, boolean b) {

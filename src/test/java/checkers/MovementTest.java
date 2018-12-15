@@ -20,7 +20,7 @@ public class MovementTest {
 		Field field = board.getFields().get(14);
 		int x = field.getXCord();
 		int y = field.getYCord();
-		board.selectField(x, y, 0);
+		board.selectField(x, y, 0, false);
 		assertFalse(field.isSelected());
 	}
 	
@@ -30,7 +30,7 @@ public class MovementTest {
 		field.addPiece(new Piece(0));
 		int x = field.getXCord();
 		int y = field.getYCord();
-		board.selectField(x, y, 0);
+		board.selectField(x, y, 0, false);
 		assertTrue(field.isSelected());
 	}
 	
@@ -40,7 +40,7 @@ public class MovementTest {
 		field.addPiece(new Piece(0));
 		int x = field.getXCord();
 		int y = field.getYCord();
-		board.selectField(x, y, 0);
+		board.selectField(x, y, 0, false);
 		assertTrue(board.getFieldByPosition(3, 9).getCanMove());
 		assertTrue(board.getFieldByPosition(5, 9).getCanMove());
 		assertTrue(board.getFieldByPosition(3, 8).getCanMove());
@@ -57,7 +57,7 @@ public class MovementTest {
 		fieldWithPiece.addPiece(new Piece(0));
 		int x = field.getXCord();
 		int y = field.getYCord();
-		board.selectField(x, y, 0);
+		board.selectField(x, y, 0, false);
 		assertTrue(board.getFieldByPosition(3, 9).getCanMove());
 		assertFalse(board.getFieldByPosition(5, 9).getCanMove());
 		assertTrue(board.getFieldByPosition(3, 8).getCanMove());
@@ -74,7 +74,7 @@ public class MovementTest {
 		fieldWithPiece.addPiece(new Piece(0));
 		int x = field.getXCord();
 		int y = field.getYCord();
-		board.selectField(x, y, 0);
+		board.selectField(x, y, 0, false);
 		assertTrue(board.getFieldByPosition(6, 9).getCanMove());
 	}
 	
@@ -92,7 +92,7 @@ public class MovementTest {
 		
 		int x = field.getXCord();
 		int y = field.getYCord();
-		board.selectField(x, y, 0);
+		board.selectField(x, y, 0, false);
 		
 		assertTrue(board.getFieldByPosition(8, 9).getCanMove());
 		assertTrue(board.getFieldByPosition(7, 7).getCanMove());
@@ -110,8 +110,8 @@ public class MovementTest {
 		int x2 = fieldToMove.getXCord();
 		int y2 = fieldToMove.getYCord();
 		
-		board.selectField(x, y, 0);
-		board.selectField(x2, y2, 0);
+		board.selectField(x, y, 0, false);
+		board.selectField(x2, y2, 0, false);
 		
 		assertTrue(field.getPiece() == null);
 		assertFalse(fieldToMove.getPiece() == null);
@@ -130,8 +130,8 @@ public class MovementTest {
 		int x2 = fieldToMove.getXCord();
 		int y2 = fieldToMove.getYCord();
 		
-		board.selectField(x, y, 0);
-		board.selectField(x2, y2, 0);
+		board.selectField(x, y, 0, false);
+		board.selectField(x2, y2, 0, false);
 		
 		assertTrue(field.getPiece() == null);
 		assertFalse(fieldToMove.getPiece() == null);

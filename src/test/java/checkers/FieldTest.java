@@ -57,6 +57,7 @@ public class FieldTest {
 	@Test
 	public void fieldToStringTest() {
 		field.setinitValues(700 / 2, 10);
+		field.addPiece(new Piece(0));
 		String fieldAsString = field.toString();
 		String expected = "4 9 10 11 312 361 false false false 0";
 		assertEquals(expected, fieldAsString);
@@ -65,6 +66,7 @@ public class FieldTest {
 	@Test
 	public void stringToFieldTest() {
 		field.setinitValues(700 / 2, 10);
+		field.addPiece(new Piece(0));
 		String fieldAsString = "4 9 10 11 312 361 false false false 0";
 		Field fieldFromString = Field.buildFromString(fieldAsString);
 		assertEquals(fieldFromString.toString(), fieldAsString);

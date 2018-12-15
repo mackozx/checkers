@@ -18,8 +18,10 @@ public class GameController {
 	private ServerSocket listener;
 	private int playerNumber;
 	private ArrayList<ClientThread> clientsList;
+	private ServerGUI gui;
 	
 	public GameController(int playerSize) {
+		gui = new ServerGUI(this);
 		playerNumber = playerSize;
 		board = new SimpleBoard(playerSize);
 		clientsList = new ArrayList<ClientThread>();
@@ -28,6 +30,10 @@ public class GameController {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void addBot(int id) {
+		board.addBot(id);
 	}
 	
 	public int getBoardSize() {
@@ -49,7 +55,7 @@ public class GameController {
 	
 	public void boardAction(int x, int y, int id) {
 		if(id == board.getActivePlayerId()) {
-			board.selectField(x, y, id);
+			board.selectField(x, y, id, false);
 		}
 	}
 	

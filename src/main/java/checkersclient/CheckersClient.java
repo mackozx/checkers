@@ -49,14 +49,8 @@ public class CheckersClient {
 		connectionThread.start();
 	}
 	
-	public /*ArrayList<checkers.Field>*/void connect(int a, int b) throws IOException {
+	public void connect(int a, int b) throws IOException {
 		out.println(a + " " + b + " " + clientId);
-		//String answer = in.readLine();
-		//ArrayList<checkers.Field> flist = new ArrayList<checkers.Field>();
-		//for(String s : answer.split("\\+")) {
-		//	flist.add(Field.buildFromString(s));
-		//}
-		//return flist;
 	}
 	
 	public void initgui() {

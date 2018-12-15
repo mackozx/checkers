@@ -29,6 +29,7 @@ public class CheckersPanel extends JPanel implements MouseListener {
 	public void paint(Graphics g) {
 		super.paint(g);
 		drawBoard(g);
+		drawSkip(g);
 	}
 
 	protected void drawBoard(Graphics g) {
@@ -39,6 +40,12 @@ public class CheckersPanel extends JPanel implements MouseListener {
 		} catch(Exception e) {
 
 		}
+	}
+	
+	protected void drawSkip(Graphics g) {
+		g.setColor(Color.BLACK);
+		g.drawString("SKIP", 566, 344);
+		g.drawRect(550, 320, 60, 46);
 	}
 
 	public void mouseClicked(MouseEvent arg0) {

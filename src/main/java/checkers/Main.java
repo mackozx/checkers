@@ -1,8 +1,11 @@
 package checkers;
 
+import javax.swing.JOptionPane;
+
 public class Main {
 
 	public static void main(String[] args) {
-		new GameController(2);
+		String players = JOptionPane.showInputDialog("ilosc graczy");
+		new GameController(Integer.parseInt(players));
 	}
 }

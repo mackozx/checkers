@@ -8,7 +8,7 @@ public interface Board {
 	
 	ArrayList<Field> getFields();
 	
-	void selectField(int x, int y, int id);
+	void selectField(int x, int y, int id, boolean isBot);
 	
 	void onStart();
 	
