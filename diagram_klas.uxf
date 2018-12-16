@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>114</x>
-      <y>84</y>
+      <x>126</x>
+      <y>66</y>
       <w>126</w>
       <h>84</h>
     </coordinates>
@@ -24,8 +24,8 @@ Board
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>168</x>
-      <y>162</y>
+      <x>180</x>
+      <y>144</y>
       <w>18</w>
       <h>48</h>
     </coordinates>
@@ -35,8 +35,8 @@ Board
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>114</x>
-      <y>198</y>
+      <x>126</x>
+      <y>180</y>
       <w>144</w>
       <h>78</h>
     </coordinates>
@@ -53,8 +53,8 @@ Board
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>324</x>
-      <y>84</y>
+      <x>336</x>
+      <y>66</y>
       <w>126</w>
       <h>96</h>
     </coordinates>
@@ -74,8 +74,8 @@ CheckersField
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>360</x>
-      <y>174</y>
+      <x>372</x>
+      <y>156</y>
       <w>18</w>
       <h>36</h>
     </coordinates>
@@ -85,8 +85,8 @@ CheckersField
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>324</x>
-      <y>198</y>
+      <x>336</x>
+      <y>180</y>
       <w>132</w>
       <h>240</h>
     </coordinates>
@@ -121,8 +121,8 @@ _+buildFromString(String s): Field_</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>252</x>
-      <y>222</y>
+      <x>264</x>
+      <y>204</y>
       <w>84</w>
       <h>24</h>
     </coordinates>
@@ -134,8 +134,8 @@ m2=121</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>450</x>
-      <y>222</y>
+      <x>462</x>
+      <y>204</y>
       <w>84</w>
       <h>24</h>
     </coordinates>
@@ -147,19 +147,21 @@ m2=0..1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>522</x>
-      <y>222</y>
+      <x>534</x>
+      <y>204</y>
       <w>60</w>
-      <h>18</h>
+      <h>36</h>
     </coordinates>
-    <panel_attributes>Piece</panel_attributes>
+    <panel_attributes>Piece
+--
+-ownerId: int</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>120</x>
-      <y>330</y>
+      <x>132</x>
+      <y>312</y>
       <w>138</w>
       <h>78</h>
     </coordinates>
@@ -177,8 +179,8 @@ m2=0..1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>180</x>
-      <y>270</y>
+      <x>192</x>
+      <y>252</y>
       <w>24</w>
       <h>72</h>
     </coordinates>
@@ -190,8 +192,8 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>174</x>
-      <y>402</y>
+      <x>186</x>
+      <y>384</y>
       <w>48</w>
       <h>66</h>
     </coordinates>
@@ -202,8 +204,8 @@ connects</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>120</x>
-      <y>456</y>
+      <x>132</x>
+      <y>438</y>
       <w>156</w>
       <h>84</h>
     </coordinates>
@@ -213,7 +215,7 @@ connects</panel_attributes>
 -out: PrintWriter
 -frame: CheckersFrame
 --
-+connect(int x, int y): ArrayList&lt;Field&gt;
++connect(int x, int y): void
 +initgui(): void
 _+main(): void_</panel_attributes>
     <additional_attributes/>
@@ -221,8 +223,8 @@ _+main(): void_</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>120</x>
-      <y>582</y>
+      <x>132</x>
+      <y>564</y>
       <w>156</w>
       <h>42</h>
     </coordinates>
@@ -236,8 +238,8 @@ getGamePanel(): CheckersPanel</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>174</x>
-      <y>534</y>
+      <x>186</x>
+      <y>516</y>
       <w>24</w>
       <h>60</h>
     </coordinates>
@@ -249,8 +251,8 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>174</x>
-      <y>618</y>
+      <x>186</x>
+      <y>600</y>
       <w>24</w>
       <h>60</h>
     </coordinates>
@@ -262,8 +264,8 @@ m2=1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>114</x>
-      <y>666</y>
+      <x>126</x>
+      <y>648</y>
       <w>162</w>
       <h>66</h>
     </coordinates>

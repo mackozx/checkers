@@ -12,11 +12,13 @@ public class SimpleBoard implements Board {
 	private int activePlayerId;
 	private int players;
 	private ArrayList<Integer> bots;
+	private ArrayList<Integer> finished;
 	
 	public SimpleBoard(int playerSize) {
 		activePlayerId = 0;
 		players = playerSize;
 		bots = new ArrayList<Integer>();
+		finished = new ArrayList<Integer>();
 		createFields();
 		for(int i = 0; i < playerSize; i++) {
 			for(Field field : corners.get(i).getCorner()) {
@@ -137,6 +139,7 @@ public class SimpleBoard implements Board {
 						selectedField.setSelected(false);
 						blockAllFields(false);
 						setCanMoveAll(false);
+						checkFinished();
 						if(!isbot) {
 							moved();
 						}
@@ -150,16 +153,93 @@ public class SimpleBoard implements Board {
 		}
 	}
 	
+	protected void checkFinished() {
+		if(activePlayerId == 0) {
+			int finishCounter = 0;
+			for(Field field : corners.get(activePlayerId + 1).getCorner()) {
+				if(field.getPiece() != null) {
+					if(field.getPiece().getOwnerId() == activePlayerId) {
+						finishCounter++;
+					}
+				}
+			}
+			if(finishCounter == 10) {
+				finished.add(activePlayerId);
+			}
+		} else if(activePlayerId == 1) {
+			int finishCounter = 0;
+			for(Field field : corners.get(activePlayerId - 1).getCorner()) {
+				if(field.getPiece() != null) {
+					if(field.getPiece().getOwnerId() == activePlayerId) {
+						finishCounter++;
+					}
+				}
+			}
+			if(finishCounter == 10) {
+				finished.add(activePlayerId);
+			}
+		} else if(activePlayerId == 2) {
+			int finishCounter = 0;
+			for(Field field : corners.get(activePlayerId + 1).getCorner()) {
+				if(field.getPiece() != null) {
+					if(field.getPiece().getOwnerId() == activePlayerId) {
+						finishCounter++;
+					}
+				}
+			}
+			if(finishCounter == 10) {
+				finished.add(activePlayerId);
+			}
+		} else if(activePlayerId == 3) {
+			int finishCounter = 0;
+			for(Field field : corners.get(activePlayerId - 1).getCorner()) {
+				if(field.getPiece() != null) {
+					if(field.getPiece().getOwnerId() == activePlayerId) {
+						finishCounter++;
+					}
+				}
+			}
+			if(finishCounter == 10) {
+				finished.add(activePlayerId);
+			}
+		} else if(activePlayerId == 4) {
+			int finishCounter = 0;
+			for(Field field : corners.get(activePlayerId + 1).getCorner()) {
+				if(field.getPiece() != null) {
+					if(field.getPiece().getOwnerId() == activePlayerId) {
+						finishCounter++;
+					}
+				}
+			}
+			if(finishCounter == 10) {
+				finished.add(activePlayerId);
+			}
+		} else if(activePlayerId == 5) {
+			int finishCounter = 0;
+			for(Field field : corners.get(activePlayerId - 1).getCorner()) {
+				if(field.getPiece() != null) {
+					if(field.getPiece().getOwnerId() == activePlayerId) {
+						finishCounter++;
+					}
+				}
+			}
+			if(finishCounter == 10) {
+				finished.add(activePlayerId);
+			}
+		}
+	}
+	
 	protected void addPlayerId() {
 		if(activePlayerId < players - 1) {
 			activePlayerId++;
 		} else {
 			activePlayerId = 0;
 		}
-		System.out.println("PLAYERID NOW " + activePlayerId);
-		/*if(bots.contains(activePlayerId)) {
-			botTurn(activePlayerId);
-		}*/
+		if(finished.size() == players) {
+			
+		} else if(finished.contains(activePlayerId)) {
+			addPlayerId();
+		}
 	}
 	
 	protected void moved() {
@@ -187,7 +267,6 @@ public class SimpleBoard implements Board {
 		}
 		botField = withPiece.get(ran.nextInt(withPiece.size() - 1));
 		selectField(botField.getXCord(), botField.getYCord(), activePlayerId, true);
-		System.out.println("SELECTED PIECE " + botField.getLine() + " " + botField.getColumn());
 		if(getCanMoveList().size() != 0) {
 			Field toMove = getCanMoveList().get(ran.nextInt(getCanMoveList().size() - 1));
 			selectField(toMove.getXCord(), toMove.getYCord(), activePlayerId, true);
